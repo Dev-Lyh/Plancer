@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Button, ScrollView, View } from 'react-native';
+import { Button, ScrollView, StyleSheet } from 'react-native';
 import React, { Component } from 'react';
 
 import Database from '../../db/database';
@@ -36,7 +36,7 @@ export default class Gigs extends Component {
   render() {
 
     return (
-      <ScrollView style={{ marginHorizontal: 20, }}>
+      <ScrollView style={styles.marginH}>
         <Button title="UPDATE LIST" onPress={this.ListGigs} color="indigo"/>
         {
             this.state.gigList.map(
@@ -62,3 +62,9 @@ export default class Gigs extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  marginH: {
+    marginHorizontal: 20,
+  },
+});

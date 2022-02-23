@@ -1,9 +1,9 @@
 /* eslint-disable prettier/prettier */
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import React, { Component } from 'react';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 
-LocaleConfig.locales[ 'br' ] = {
+LocaleConfig.locales.br = {
   monthNames: [
     'Janeiro',
     'Fevereiro',
@@ -26,12 +26,29 @@ LocaleConfig.locales[ 'br' ] = {
 LocaleConfig.defaultLocale = 'br';
 
 export default class CalendarPage extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      listDates: {
+        '2022-02-16': { marked: true, dotColor: '#5851E7' },
+        '2022-02-17': { marked: true, dotColor: '#5851E7' },
+        '2022-02-18': { marked: true },
+      },
+    };
+  }
+
   render() {
+
+    console.log(this.state.listDates);
     return (
       <View>
         <Calendar
 
           onDayPress={(day) => console.log(day.dateString)}
+
+          markedDates={this.state.listDates}
 
           theme={{
             backgroundColor: '#ffffff',

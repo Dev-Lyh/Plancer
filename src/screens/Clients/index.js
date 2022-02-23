@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Text, View, Button, TextInput, ScrollView } from 'react-native';
+import { Text, Button, TextInput, ScrollView } from 'react-native';
 import React, { Component } from 'react';
 import Modal from 'react-native-modal';
 
@@ -50,7 +50,7 @@ export default class Clients extends Component {
   render() {
     return (
       <ScrollView>
-        <Button title='Open' color="indigo" onPress={this.handleModal} />
+        <Button title="Open" color="indigo" onPress={this.handleModal} />
 
         <Modal isVisible={this.state.isVisible}>
           <Button title="CLOSE" color="black" onPress={this.handleModal} />
