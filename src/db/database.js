@@ -21,15 +21,28 @@ export default class Database {
                 SQLite.openDatabase(database_name, database_version, database_displayname, database_size).then(DB => {
                     db = DB;
                     console.log('DATABASE OPEN');
-                    db.executeSql('SELECT 1 FROM Gig LIMIT 1; SELECT 1 FROM Client LIMIT 1;').then(() => {
+                    db.executeSql('SELECT 1 FROM Gig LIMIT 1;').then(() => {
                         console.log('O banco de dados está pronto ... Executando Consulta SQL ...');
                     }).catch((error) => {
                         console.log('Erro Recebido: ', error);
                         console.log('O Banco de dados não está pronto ... Criando Dados');
                         db.transaction((tx) => {
-                            tx.executeSql('CREATE TABLE IF NOT EXISTS Gig (idGig INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT, gigDate TEXT, deadLine TEXT, price TEXT, clientName TEXT, phoneClient TEXT, concluded TEXT); CREATE TABLE IF NOT EXISTS Client (idClient INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, phoneNumber TEXT);');
+                            tx.executeSql('CREATE TABLE IF NOT EXISTS Gig (idGig INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT, gigDate TEXT, deadLine TEXT, price TEXT, clientName TEXT, phoneClient TEXT, concluded TEXT);');
                         }).then(() => {
-                            console.log('Successfully created tables');
+                            console.log('Successfully created table GIGS');
+                        }).catch(error => {
+                            console.log(error);
+                        });
+                    });
+                    db.executeSql('SELECT 1 FROM Client LIMIT 1;').then(() => {
+                        console.log('O banco de dados está pronto ... Executando Consulta SQL ...');
+                    }).catch((error) => {
+                        console.log('Erro Recebido: ', error);
+                        console.log('O Banco de dados não está pronto ... Criando Dados');
+                        db.transaction((tx) => {
+                            tx.executeSql('CREATE TABLE IF NOT EXISTS Client (idClient INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, phoneNumber TEXT);');
+                        }).then(() => {
+                            console.log('Successfully created tables CLIENTS');
                         }).catch(error => {
                             console.log(error);
                         });
@@ -63,7 +76,7 @@ export default class Database {
             this.Conectar().then((db) => {
                 db.transaction((tx) => {
                     //Query SQL para listar os dados da tabela;
-                    tx.executeSql('SELECT * FROM Gig', []).then(([tx, results]) => {
+                    tx.executeSql('SELECT * FROM Gig ORDER BY idGig DESC', []).then(([tx, results]) => {
                         console.log('Full consultation');
                         var len = results.rows.length;
                         for (let i = 0; i < len; i++) {

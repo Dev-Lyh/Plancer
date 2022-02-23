@@ -1,21 +1,64 @@
 /* eslint-disable prettier/prettier */
-import { View, Text } from 'react-native';
+import { Button, ScrollView, View } from 'react-native';
 import React, { Component } from 'react';
 
-import NewGig from '../NewGig';
-import Card from '../../components/Card';
-
 import Database from '../../db/database';
-// import Gig from '../../models/Gig';
 
+import Card from '../../components/Card';
 export default class Gigs extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      title: '',
+      description: '',
+      gigDate: '',
+      deadLine: '',
+      price: '',
+      clientName: '',
+      phoneClient: '',
+      concluded: '',
+      gigList: [],
+    };
+    this.ListGigs();
+  }
+
+  ListGigs = () => {
+    const db = new Database();
+    db.ListGigs().then(
+      completeGigList => {
+        this.setState({ gigList: completeGigList });
+        console.log('Sua lista: ', completeGigList);
+      }
+    );
+  }
 
   render() {
 
     return (
-      <View style={{ marginHorizontal: 20, }}>
-        {/**Nesta tela deveria aparecer os cards com as informações dos pedidos */}
-      </View>
+      <ScrollView style={{ marginHorizontal: 20, }}>
+        <Button title="UPDATE LIST" onPress={this.ListGigs} color="indigo"/>
+        {
+            this.state.gigList.map(
+              (item, index) => (
+                <Card
+                  key={index}
+                  item={item}
+                  id={index + 1}
+                  title={item.title}
+                  description={item.description}
+                  price = {item.price}
+                  gigDate={item.gigDate}
+                  deadLine={item.deadLine}
+                  clientName={item.clientName}
+                  phoneClient={item.phoneClient}
+                  excluir={this.Excluir}
+                  concluir={this.Concluir}
+                />
+              )
+            )
+          }
+      </ScrollView>
     );
   }
 }

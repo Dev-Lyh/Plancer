@@ -5,34 +5,28 @@ import React, { Component } from 'react';
 import Database from '../../db/database';
 import Gig from '../../models/Gig';
 
-import Card from '../../components/Card';
-
+import Gigs from '../Gigs/index';
 export default class NewGig extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      title: 'Hello',
-      description: 'Hello',
-      gigDate: '12-06-2222',
-      deadLine: '13-06-2222',
-      price: '150,00',
-      clientName: 'Oswald Cruz',
-      phoneClient: '91999999',
-      concluded: 'Sim',
-      gigList: []
+      title: '',
+      description: '',
+      gigDate: '',
+      deadLine: '',
+      price: '',
+      clientName: '',
+      phoneClient: '',
+      concluded: '',
+      gigList: [],
     };
     this.ListGigs();
   }
 
   ListGigs = () => {
-    const db = new Database();
-    db.ListGigs().then(
-      completeGigList => {
-        this.setState({ gigList: completeGigList });
-        console.log('Sua lista: ', completeGigList);
-      }
-    );
+    const g = new Gigs();
+    g.ListGigs();
   }
 
   InsertGig = (title, description, gigDate, deadLine, price, clientName, phoneClient) => {
