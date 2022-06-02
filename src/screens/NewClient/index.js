@@ -28,7 +28,7 @@ export default class NewClient extends Component {
 
   render() {
     return (
-      <View>
+      <View >
         <TextInput placeholder="title" onChangeText={(value) => { this.setState({ name: value }); }} />
 
         <TextInput placeholder="description" onChangeText={(value) => { this.setState({ email: value }); }} />

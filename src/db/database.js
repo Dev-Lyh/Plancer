@@ -40,7 +40,7 @@ export default class Database {
                         console.log('Erro Recebido: ', error);
                         console.log('O Banco de dados não está pronto ... Criando Dados');
                         db.transaction((tx) => {
-                            tx.executeSql('CREATE TABLE IF NOT EXISTS Client (idClient INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, phoneNumber TEXT);');
+                            tx.executeSql('CREATE TABLE IF NOT EXISTS Client (idClient INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, phoneNumber TEXT, favorite TEXT, imgPath TEXT);');
                         }).then(() => {
                             console.log('Successfully created tables CLIENTS');
                         }).catch(error => {
@@ -81,11 +81,11 @@ export default class Database {
                         var len = results.rows.length;
                         for (let i = 0; i < len; i++) {
                             let row = results.rows.item(i);
-                            const { idGig, title, description, gigDate, deadLine, price, clientName, phoneNumberClinte, concluded } = row;
-                            listGigs.push({ idGig, title, description, gigDate, deadLine, price, clientName, phoneNumberClinte, concluded });
+                            const { idGig, title, description, gigDate, deadLine, price, clientName, phoneClient, concluded } = row;
+                            listGigs.push({ idGig, title, description, gigDate, deadLine, price, clientName, phoneClient, concluded });
                         }
-                        console.log(listGigs);
-                        resolve(listGigs);
+                            console.log(listGigs);
+                            resolve(listGigs);
                     });
                 }).then((result) => {
                     this.Desconectar(db);
@@ -104,13 +104,13 @@ export default class Database {
             this.Conectar().then((db) => {
                 db.transaction((tx) => {
                     //Query SQL para listar os dados da tabela;
-                    tx.executeSql('SELECT * FROM Client', []).then(([tx, results]) => {
+                    tx.executeSql('SELECT * FROM Client ORDER BY name ASC', []).then(([tx, results]) => {
                         console.log('Full consultation');
                         var len = results.rows.length;
                         for (let i = 0; i < len; i++) {
                             let row = results.rows.item(i);
-                            const { idClient, name, email, phoneNumber } = row;
-                            listClients.push({ idClient, name, email, phoneNumber });
+                            const { idClient, name, email, phoneNumber, favorite, imgPath } = row;
+                            listClients.push({ idClient, name, email, phoneNumber, favorite, imgPath });
                         }
                         console.log(listClients);
                         resolve(listClients);
@@ -198,7 +198,7 @@ export default class Database {
             this.Conectar().then((db) => {
                 db.transaction((tx) => {
                     //Query SQL para inserir um novo produto;
-                    tx.executeSql('INSERT INTO Client ( name, email, phoneNumber ) VALUES (?, ?, ?)', [item.title, item.email, item.phoneNumber]).then(([tx, results]) => {
+                    tx.executeSql('INSERT INTO Client ( name, email, phoneNumber, favorite, imgPath ) VALUES (?, ?, ?, ?, ?)', [item.name, item.email, item.phoneNumber, item.favorite, item.imgPath]).then(([tx, results]) => {
                         resolve(results);
                     });
                 }).then((result) => {
@@ -218,6 +218,44 @@ export default class Database {
                 db.transaction((tx) => {
                     //Query SQL para atualizar um dado no banco;
                     tx.executeSql('UPDATE Gig SET concluded = "Sim" WHERE idGig = ?', [item.idGig]).then(([tx, results]) => {
+                        resolve(results);
+                    });
+                }).then((result) => {
+                    this.Desconectar(db);
+                }).catch((err) => {
+                    console.log(err);
+                });
+            }).catch((err) => {
+                console.log(err);
+            });
+        });
+    }
+
+    UpdateToFavorite(item) {
+        return new Promise((resolve) => {
+            this.Conectar().then((db) => {
+                db.transaction((tx) => {
+                    //Query SQL para atualizar um dado no banco;
+                    tx.executeSql('UPDATE Client SET favorite = "true" WHERE idClient = ?', [item.idClient]).then(([tx, results]) => {
+                        resolve(results);
+                    });
+                }).then((result) => {
+                    this.Desconectar(db);
+                }).catch((err) => {
+                    console.log(err);
+                });
+            }).catch((err) => {
+                console.log(err);
+            });
+        });
+    }
+
+    UpdateToUnfavorite(item) {
+        return new Promise((resolve) => {
+            this.Conectar().then((db) => {
+                db.transaction((tx) => {
+                    //Query SQL para atualizar um dado no banco;
+                    tx.executeSql('UPDATE Client SET favorite = "false" WHERE idClient = ?', [item.idClient]).then(([tx, results]) => {
                         resolve(results);
                     });
                 }).then((result) => {
@@ -251,12 +289,12 @@ export default class Database {
         });
     }
 
-    DeleteClient(id) {
+    DeleteClient(idClient) {
         return new Promise((resolve) => {
             this.Conectar().then((db) => {
                 db.transaction((tx) => {
                     //Query SQL para deletar um item da base de dados;
-                    tx.executeSql('DELETE FROM Client WHERE idClient = ?', [id]).then(([tx, results]) => {
+                    tx.executeSql('DELETE FROM Client WHERE idClient = ?', [idClient]).then(([tx, results]) => {
                         console.log(results);
                         resolve(results);
                     });

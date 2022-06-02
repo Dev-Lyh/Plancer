@@ -1,6 +1,9 @@
 /* eslint-disable prettier/prettier */
-import { Button, ScrollView, StyleSheet } from 'react-native';
+import { TouchableOpacity, Text, ScrollView, StyleSheet, View, Dimensions } from 'react-native';
 import React, { Component } from 'react';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import LinearGradient from 'react-native-linear-gradient';
+import Logo from '../../assets/Logo';
 
 import Database from '../../db/database';
 
@@ -33,38 +36,91 @@ export default class Gigs extends Component {
     );
   }
 
+  DelGig = (id) => {
+    const db = new Database();
+    db.DeleteGig(id);
+    this.ListGigs();
+  }
+
+  Conclud = () => {
+
+  }
+
   render() {
 
     return (
       <ScrollView style={styles.marginH}>
-        <Button title="UPDATE LIST" onPress={this.ListGigs} color="indigo"/>
+
+        <View style={styles.header}>
+          <Logo />
+        </View>
+
         {
+          this.state.gigList.length === 0
+            ?
+            <View style={styles.viewNoneGig}>
+              <Text style={styles.noneGig}>Nenhum pedido adicionado</Text>
+            </View>
+            :
             this.state.gigList.map(
-              (item, index) => (
+              item => (
                 <Card
-                  key={index}
+                  key={item.idGig}
                   item={item}
-                  id={index + 1}
+                  id={item.idGig}
                   title={item.title}
                   description={item.description}
-                  price = {item.price}
+                  price={item.price}
                   gigDate={item.gigDate}
                   deadLine={item.deadLine}
                   clientName={item.clientName}
                   phoneClient={item.phoneClient}
-                  excluir={this.Excluir}
-                  concluir={this.Concluir}
+                  excluir={this.DelGig}
+                  concluir={this.Conclud}
                 />
               )
             )
-          }
+        }
       </ScrollView>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  header: {
+    flexDirection: 'row',
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginVertical: 20,
+  },
+  viewNoneGig: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: 500,
+  },
+  noneGig: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
   marginH: {
-    marginHorizontal: 20,
+    paddingHorizontal: 20,
+    backgroundColor: '#181818',
+  },
+  containerButton: {
+    height: 50,
+    width: 150,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 50 / 4,
+  },
+  icon: {
+    marginRight: 10,
+  },
+  textBtn: {
+    color: 'white',
+    fontSize: 16,
   },
 });
