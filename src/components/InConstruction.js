@@ -8,7 +8,7 @@ import LottieView from 'lottie-react-native';
 export default class InConstruction extends Component {
   render() {
     return (
-      <View>
+      <View style={styles.view}>
         <LottieView source={Gears} autoPlay={true} loop={true} />
         <Text style={styles.text}> Em construção </Text>
       </View>
@@ -16,6 +16,9 @@ export default class InConstruction extends Component {
   }
 }
 const styles = StyleSheet.create({
+  view: {
+    backgroundColor: '#181818',
+  },
   text: {
     fontSize: 24,
     color: '#FFF',

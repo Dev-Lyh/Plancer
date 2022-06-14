@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Text, TextInput, ScrollView, TouchableOpacity, StyleSheet, View, Image } from 'react-native';
+import { Text, TextInput, ScrollView, TouchableOpacity, StyleSheet, View, Image, Button } from 'react-native';
 import React, { Component } from 'react';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -44,7 +44,6 @@ export default class Clients extends Component {
         console.log('Sua lista de Clients: ', completeClientList);
       }
     );
-    this.setState({ imgPath: '' });
   }
 
   InsertClient = (name, email, phoneNumber, favorite, imgPath) => {
@@ -52,6 +51,7 @@ export default class Clients extends Component {
     const db = new Database();
     db.InsertClient(newClient).then(
       this.ListClients());
+    this.setState({ imgPath: '' });
     this.handleModal();
   }
 
@@ -64,9 +64,15 @@ export default class Clients extends Component {
 
   choosePhotoFromLibrary = () => {
     ImagePicker.openPicker({
-      width: 300,
+      width: 400,
       height: 400,
       cropping: true,
+      cropperTintColor: '#5851e7',
+      cropperToolbarColor: '#5851e7',
+      cropperActiveWidgetColor: '#5851e7',
+      cropperStatusBarColor: '#181818',
+      cropperToolbarWidgetColor: '#ffffff',
+      cropperToolbarTitle: 'Editar foto',
     }).then(image => {
       this.onSelectedImage(image);
       console.log(image);
@@ -121,15 +127,9 @@ export default class Clients extends Component {
             ) : (
               <Image source={{ uri: this.state.imgPath }} style={styles.imageFullBox} />
             )}
-            <TouchableOpacity
-              onPress={this.choosePhotoFromLibrary}
-              style={styles.options}
-            >
-              <Text style={styles.optionsText}>
-                Escolher uma foto da galeria
-              </Text>
-            </TouchableOpacity>
-            <LinearGradient colors={['rgba(88, 81, 231, 1)', 'rgba(88, 81, 231, 0)']} style={styles.gradientContainer}>
+            <Button title={'Escolher uma foto da galeria'} onPress={this.choosePhotoFromLibrary} color={'rgba(88, 81, 231, 1)'}/>
+
+            <LinearGradient colors={['rgba(88, 81, 231, 1)', 'rgba(88, 81, 231, 0)']} style={[styles.gradientContainer, { marginTop: 30 }]}>
               <TextInput style={styles.input} placeholder="Nome do Cliente" onChangeText={(value) => { this.setState({ name: value }); }} placeholderTextColor="rgba(255,255,255,0.5)" />
             </LinearGradient>
 
@@ -175,15 +175,17 @@ export default class Clients extends Component {
 const styles = StyleSheet.create({
   imageEmptyBox: {
     width: '100%',
-    height: 150,
-    backgroundColor: '#4168E1',
+    height: 200,
+    backgroundColor: 'rgba(88, 81, 231, 0.1)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   imageFullBox: {
     width: '100%',
-    height: 150,
+    height: 200,
   },
   noneImage: {
-    color: 'midnightblue',
+    color: 'white',
     textAlign: 'center',
   },
   header: {

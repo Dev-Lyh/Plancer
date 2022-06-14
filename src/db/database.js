@@ -27,7 +27,7 @@ export default class Database {
                         console.log('Erro Recebido: ', error);
                         console.log('O Banco de dados não está pronto ... Criando Dados');
                         db.transaction((tx) => {
-                            tx.executeSql('CREATE TABLE IF NOT EXISTS Gig (idGig INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT, gigDate TEXT, deadLine TEXT, price TEXT, clientName TEXT, phoneClient TEXT, concluded TEXT);');
+                            tx.executeSql('CREATE TABLE IF NOT EXISTS Gig (idGig INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, description TEXT, gigDate TEXT, deadLine TEXT, price TEXT, clientName TEXT, phoneClient TEXT, concluded TEXT, imgPath TEXT);');
                         }).then(() => {
                             console.log('Successfully created table GIGS');
                         }).catch(error => {
@@ -81,8 +81,8 @@ export default class Database {
                         var len = results.rows.length;
                         for (let i = 0; i < len; i++) {
                             let row = results.rows.item(i);
-                            const { idGig, title, description, gigDate, deadLine, price, clientName, phoneClient, concluded } = row;
-                            listGigs.push({ idGig, title, description, gigDate, deadLine, price, clientName, phoneClient, concluded });
+                            const { idGig, title, description, gigDate, deadLine, price, clientName, phoneClient, concluded, imgPath } = row;
+                            listGigs.push({ idGig, title, description, gigDate, deadLine, price, clientName, phoneClient, concluded, imgPath });
                         }
                             console.log(listGigs);
                             resolve(listGigs);
@@ -179,7 +179,7 @@ export default class Database {
             this.Conectar().then((db) => {
                 db.transaction((tx) => {
                     //Query SQL para inserir um novo produto;
-                    tx.executeSql('INSERT INTO Gig ( title, description, gigDate, deadLine, price, clientName, phoneClient ) VALUES (?, ?, ?, ?, ?, ?, ?)', [item.title, item.description, item.gigDate, item.deadLine, item.price, item.clientName, item.phoneClient]).then(([tx, results]) => {
+                    tx.executeSql('INSERT INTO Gig ( title, description, gigDate, deadLine, price, clientName, phoneClient, concluded, imgPath ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [item.title, item.description, item.gigDate, item.deadLine, item.price, item.clientName, item.phoneClient, item.concluded, item.imgPath]).then(([tx, results]) => {
                         resolve(results);
                     });
                 }).then((result) => {
@@ -217,7 +217,7 @@ export default class Database {
             this.Conectar().then((db) => {
                 db.transaction((tx) => {
                     //Query SQL para atualizar um dado no banco;
-                    tx.executeSql('UPDATE Gig SET concluded = "Sim" WHERE idGig = ?', [item.idGig]).then(([tx, results]) => {
+                    tx.executeSql('UPDATE Gig SET concluded = "true" WHERE idGig = ?', [item.idGig]).then(([tx, results]) => {
                         resolve(results);
                     });
                 }).then((result) => {

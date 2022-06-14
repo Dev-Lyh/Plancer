@@ -1,19 +1,39 @@
 /* eslint-disable prettier/prettier */
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, Image, Button } from 'react-native';
+import Octicons from 'react-native-vector-icons/Octicons';
 
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import LinearGradient from 'react-native-linear-gradient';
 
 export default class Card extends Component {
+  handleConclud = (id) => {
+    if (this.props.concluded === 'false') {
+      this.props.concluir(id);
+    }
+  }
+  isImage = () => {
+    if (this.props.image === '') {
+      return (
+        <LinearGradient colors={['rgba(250, 250, 231, 1)', 'rgba(250, 250, 200, 1)']} style={{ alignItems: 'center', justifyContent: 'center', width: '100%', height: 200, opacity: this.props.concluded === "false" ? 1 : 0.5 }}>
+          <Octicons name={'code-review'} color={this.props.concluded === 'false' ? '#7b68ee' : '#fff'} size={80} />
+        </LinearGradient>
+      )
+
+    } else {
+      return <Image style={{ width: '100%', height: 200, opacity: this.props.concluded === "false" ? 1 : 0.5}} source={{ uri: this.props.image }} />;
+
+    }
+  }
   render() {
     return (
       <LinearGradient colors={['rgba(88, 81, 231, 1)', 'rgba(88, 81, 231, 0)']} style={styles.colorBorder}>
+        {this.isImage()}
         <View style={styles.container}>
           <View style={styles.borderBottom}>
             <Text style={styles.title}>{this.props.title}</Text>
-            <Text style={styles.description}>{this.props.description}</Text>
+            <Text style={styles.description}>{this.props.description === '' ? 'Sem descrição' : this.props.description}</Text>
             <View style={styles.dateContainer}>
               <View>
                 <Text style={styles.dateTitle}>Initial Date</Text>
@@ -36,17 +56,22 @@ export default class Card extends Component {
             </View>
           </View>
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-            <Icon name="phone-alt" color="white" size={16} style={styles.marginRight}/>
-            <Text  style={styles.phoneNumber}> {this.props.phoneClient}</Text>
+            <Icon name="phone-alt" color="white" size={16} style={styles.marginRight} />
+            <Text style={styles.phoneNumber}> {this.props.phoneClient === '' ? 'Sem número de telefone' : this.props.phoneClient}</Text>
+          </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+            {
+              this.props.concluded === 'false'
+                ?
+                <>
+                  <Button onPress={() => this.props.excluir(this.props.id)} title="deletar" color={'tomato'} />
+                  <Button onPress={() => this.handleConclud(this.props.item)} title="concluir" color={'seagreen'} />
+                </>
+                :
+                <Button onPress={() => this.props.excluir(this.props.id)} title="deletar" color={'tomato'} />
+              }
           </View>
           <Text style={styles.description}>Pedido: {this.props.id}</Text>
-          <TouchableOpacity onPress={() => this.props.excluir(this.props.id)}>
-            <Text>DELETAR</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => this.props.concluir(this.props.id)}>
-            <Text>EDITAR</Text>
-          </TouchableOpacity>
         </View>
       </LinearGradient>
     );

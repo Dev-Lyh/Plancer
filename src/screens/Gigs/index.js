@@ -1,8 +1,6 @@
 /* eslint-disable prettier/prettier */
-import { TouchableOpacity, Text, ScrollView, StyleSheet, View, Dimensions } from 'react-native';
+import { Text, ScrollView, StyleSheet, View, Button } from 'react-native';
 import React, { Component } from 'react';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import LinearGradient from 'react-native-linear-gradient';
 import Logo from '../../assets/Logo';
 
 import Database from '../../db/database';
@@ -13,14 +11,6 @@ export default class Gigs extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      title: '',
-      description: '',
-      gigDate: '',
-      deadLine: '',
-      price: '',
-      clientName: '',
-      phoneClient: '',
-      concluded: '',
       gigList: [],
     };
     this.ListGigs();
@@ -36,15 +26,18 @@ export default class Gigs extends Component {
     );
   }
 
-  DelGig = (id) => {
+  DelGig = (idGigs) => {
     const db = new Database();
-    db.DeleteGig(id);
+    db.DeleteGig(idGigs);
     this.ListGigs();
   }
 
-  Conclud = () => {
-
+  Conclud = (idGigs) => {
+    const db = new Database();
+    db.UpdateGig(idGigs);
+    this.ListGigs();
   }
+
 
   render() {
 
@@ -53,6 +46,8 @@ export default class Gigs extends Component {
 
         <View style={styles.header}>
           <Logo />
+          <Button title="Atualizar" onPress={() => this.ListGigs()} color={'#7b68ee'} />
+
         </View>
 
         {
@@ -70,11 +65,13 @@ export default class Gigs extends Component {
                   id={item.idGig}
                   title={item.title}
                   description={item.description}
+                  image={item.imgPath}
                   price={item.price}
                   gigDate={item.gigDate}
                   deadLine={item.deadLine}
                   clientName={item.clientName}
                   phoneClient={item.phoneClient}
+                  concluded={item.concluded}
                   excluir={this.DelGig}
                   concluir={this.Conclud}
                 />

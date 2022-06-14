@@ -32,11 +32,25 @@ export default class CardClient extends Component {
     }
   }
 
+  isImage = () => {
+    if (this.props.image === "") {
+      return (
+        <View style={{ width: 150, height: 150, borderRadius: 10, backgroundColor: '#7b68ee', alignItems: 'center', justifyContent: 'center' }}>
+          <Icon name={'person'} color={'#fff'} size={150} />
+        </View>
+      )
+
+    } else {
+      return <Image style={{ width: 150, height: 150, borderRadius: 10 }} source={{ uri: this.props.image }} />
+
+    }
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.borderBottom}>
-          <Image style={{width: 150, height: 150, borderRadius: 10}} source={{uri: this.props.image}}/>
+          {this.isImage()}
           <Text style={styles.nameStyle}>{this.props.name}</Text>
           <Text style={styles.mailStyle}>{this.props.email}</Text>
           <Text style={styles.phoneStyle}>{this.props.phoneNumber}</Text>
@@ -81,7 +95,7 @@ const styles = StyleSheet.create({
   },
   nameStyle: {
     fontSize: 24,
-    color:'white',
+    color: 'white',
     fontWeight: 'bold',
   },
   mailStyle: {

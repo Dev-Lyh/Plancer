@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 export default class Gig {
-  constructor(title, description, gigDate, deadLine, price, clientName, phoneClient, concluded) {
+  constructor(title, description, gigDate, deadLine, price, clientName, phoneClient, concluded, imgPath) {
     this.title = title;
     this.description = description;
     this.gigDate = gigDate;
@@ -9,5 +9,6 @@ export default class Gig {
     this.clientName = clientName;
     this.phoneClient = phoneClient;
     this.concluded = concluded;
+    this.imgPath = imgPath;
   }
 }

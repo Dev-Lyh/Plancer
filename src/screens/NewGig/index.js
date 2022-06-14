@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
-import { Text, View, ScrollView, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, View, ScrollView, TextInput, StyleSheet, TouchableOpacity, Image, Button } from 'react-native';
 import React, { Component } from 'react';
+import ImagePicker from 'react-native-image-crop-picker';
 
 import Database from '../../db/database';
 import Gig from '../../models/Gig';
@@ -22,28 +23,43 @@ export default class NewGig extends Component {
       deadLine: '',
       price: '',
       clientName: '',
+      imgPath: '',
       phoneClient: '',
-      concluded: '',
+      concluded: 'false',
       gigList: [],
     };
-    this.ListGigs();
+  }
+    onSelectedImage = image => {
+    const source = { uri: image.path };
+    this.setState({ imgPath: source.uri });
+    console.log('This is source.uri', source.uri, 'Type OF: ', typeof (source.uri));
+    console.log('filePath STATE', this.state.imgPath);
+  };
+
+  choosePhotoFromLibrary = () => {
+    ImagePicker.openPicker({
+      width: 600,
+      height: 400,
+      cropping: true,
+      cropperTintColor: '#5851e7',
+      cropperToolbarColor: '#5851e7',
+      cropperActiveWidgetColor: '#5851e7',
+      cropperStatusBarColor: '#181818',
+      cropperToolbarWidgetColor: '#ffffff',
+      cropperToolbarTitle: 'Editar foto',
+    }).then(image => {
+      this.onSelectedImage(image);
+      console.log(image);
+    });
+  }
+  InsertGig = (title, description, gigDate, deadLine, price, clientName, phoneClient, concluded, imgPath) => {
+    const g = new Gigs();
+    const newGig = new Gig(title, description, gigDate, deadLine, price, clientName, phoneClient, concluded, imgPath);
+    const db = new Database();
+    db.InsertGig(newGig).then(g.ListGigs()).catch(error => console.log(error));
+    this.setState({ imgPath: '' });
   }
 
-  ListGigs = () => {
-    const db = new Database();
-    db.ListGigs().then(
-      completeGigList => {
-        this.setState({ gigList: completeGigList });
-        console.log('Sua lista: ', completeGigList);
-      }
-    );
-  }
-
-  InsertGig = (title, description, gigDate, deadLine, price, clientName, phoneClient) => {
-    const newGig = new Gig(title, description, gigDate, deadLine, price, clientName, phoneClient);
-    const db = new Database();
-    db.InsertGig(newGig).then(this.ListGigs());
-  }
 
   render() {
     return (
@@ -54,7 +70,15 @@ export default class NewGig extends Component {
         </View>
 
         <Text style={styles.titlePage}>Adicionar novo pedido</Text>
-        <LinearGradient colors={['rgba(88, 81, 231, 1)', 'rgba(88, 81, 231, 0)']} style={styles.gradientContainer}>
+        {this.state.imgPath === '' ? (
+          <View style={styles.imageEmptyBox}>
+            <Text style={styles.noneImage}>Nenhuma imagem selecionada</Text>
+          </View>
+        ) : (
+          <Image source={{ uri: this.state.imgPath }} style={styles.imageFullBox} />
+        )}
+        <Button title={'Escolher uma foto da galeria'} onPress={this.choosePhotoFromLibrary} color={'rgba(88, 81, 231, 1)'} />
+        <LinearGradient colors={['rgba(88, 81, 231, 1)', 'rgba(88, 81, 231, 0)']} style={[styles.gradientContainer, { marginTop: 30 }]}>
           <TextInput style={styles.input} placeholder="Título" onChangeText={(value) => { this.setState({ title: value }); }} placeholderTextColor="rgba(255,255,255,0.5)" />
         </LinearGradient>
         <LinearGradient colors={['rgba(88, 81, 231, 1)', 'rgba(88, 81, 231, 0)']} style={styles.gradientContainer}>
@@ -77,7 +101,7 @@ export default class NewGig extends Component {
         </LinearGradient>
 
         <View style={{ alignItems: 'center' }}>
-          <TouchableOpacity onPress={() => this.InsertGig(this.state.title, this.state.description, this.state.gigDate, this.state.deadLine, this.state.price, this.state.clientName, this.state.phoneClient)} style={styles.containerButton}>
+          <TouchableOpacity onPress={() => this.InsertGig(this.state.title, this.state.description, this.state.gigDate, this.state.deadLine, this.state.price, this.state.clientName, this.state.phoneClient, this.state.concluded,this.state.imgPath)} style={styles.containerButton}>
             <Icon name="plus" color="white" size={32} style={{ marginHorizontal: 15 }} />
             <Text style={styles.textBtn}>Adicionar pedido</Text>
           </TouchableOpacity>
@@ -92,6 +116,21 @@ export default class NewGig extends Component {
   }
 }
 const styles = StyleSheet.create({
+  imageEmptyBox: {
+    width: '100%',
+    height: 200,
+    backgroundColor: 'rgba(88, 81, 231, 0.1)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  imageFullBox: {
+    width: '100%',
+    height: 200,
+  },
+  noneImage: {
+    color: 'white',
+    textAlign: 'center',
+  },
   header: {
     flexDirection: 'row',
     height: 50,

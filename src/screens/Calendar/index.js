@@ -1,11 +1,13 @@
 /* eslint-disable prettier/prettier */
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Button } from 'react-native';
 import React, { Component } from 'react';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import LinearGradient from 'react-native-linear-gradient';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import Database from '../../db/database';
 import Logo from '../../assets/Logo';
 import CardSchedule from '../../components/CardSchedule';
+import Modal from 'react-native-modal';
 
 
 LocaleConfig.locales.br = {
@@ -44,6 +46,7 @@ export default class CalendarPage extends Component {
       clientName: '',
       phoneClient: '',
       concluded: '',
+      modalInfo: true,
       gigList: [],
       dateList: [],
     };
@@ -59,7 +62,15 @@ export default class CalendarPage extends Component {
         console.log('Sua lista: ', completeGigList);
       }
     );
+  }
+
+  showInfo = () => {
+    if (this.state.modalInfo === false) {
+      this.setState({ modalInfo: true });
+    } else {
+      this.setState({ modalInfo: false });
     }
+  }
 
   render() {
 
@@ -67,63 +78,78 @@ export default class CalendarPage extends Component {
       <View style={styles.container}>
         <View style={styles.header}>
           <Logo />
+          <TouchableOpacity onPress={this.showInfo}>
+            <LinearGradient colors={['#5851E7', '#38347F']} start={{ x: 1, y: 0 }} end={{ x: 0, y: 0 }} style={styles.containerButtonInfo}>
+              <Icon name={'info-outline'} color={'white'} size={28} />
+            </LinearGradient>
+          </TouchableOpacity>
         </View>
+
+        <Modal isVisible={this.state.modalInfo}>
+          <View style={styles.modalInfo}>
+            <Icon name={'error'} color={'white'} size={48} />
+            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 20 }}>Resurso não implementado.</Text>
+          </View>
+          <Button color={'mediumslateblue'} title={'Fechar'} onPress={this.showInfo} />
+        </Modal>
 
         <Calendar
           theme={{
-            backgroundColor: '#ffffff',
-            calendarBackground: '#ffffff',
-            textSectionTitleColor: '#b6c1cd',
-            textSectionTitleDisabledColor: '#d9e1e8',
-            selectedDayBackgroundColor: '#00adf5',
-            selectedDayTextColor: '#ffffff',
-            todayTextColor: '#00adf5',
-            dayTextColor: '#2d4150',
-            textDisabledColor: '#d9e1e8',
-            dotColor: '#00adf5',
-            selectedDotColor: '#ffffff',
-            arrowColor: 'orange',
+            backgroundColor: '#181818',
+            calendarBackground: '#181818',
+            textSectionTitleColor: '#fff',
+            textSectionTitleDisabledColor: '#fff',
+            selectedDayBackgroundColor: '#fff',
+            selectedDayTextColor: '#5851E7',
+            todayTextColor: '#5851E7',
+            dayTextColor: '#fff',
+            textDisabledColor: '#a0a0a0',
+            dotColor: '#5851E7',
+            selectedDotColor: '#181818',
+            arrowColor: '#5851E7',
             disabledArrowColor: '#d9e1e8',
-            monthTextColor: 'blue',
+            monthTextColor: 'white',
             indicatorColor: 'blue',
-            textDayFontFamily: 'monospace',
-            textMonthFontFamily: 'monospace',
-            textDayHeaderFontFamily: 'monospace',
-            textDayFontWeight: '300',
-            textMonthFontWeight: 'bold',
-            textDayHeaderFontWeight: '300',
+            textDayFontFamily: 'sans-serif',
+            textMonthFontFamily: 'sans-serif',
+            textDayHeaderFontFamily: 'sans-serif',
+            textDayFontWeight: 'bold',
+            textMonthFontWeight: '400',
+            textDayHeaderFontWeight: '400',
             textDayFontSize: 16,
-            textMonthFontSize: 16,
-            textDayHeaderFontSize: 16,
+            textMonthFontSize: 20,
+            textDayHeaderFontSize: 12,
           }}
-          markedDates={{'2022-06-02': {marked: true}}}
+          markedDates={{ '2022-06-02': { marked: true } }}
         />
 
         <LinearGradient colors={['#5851E7', '#38347F']} style={styles.lineAfterCalendar} start={{ x: 1, y: 0 }} end={{ x: 0, y: 0 }} />
 
         <View style={styles.sameLine}>
           <Text style={styles.text}>Cronograma</Text>
-          <TouchableOpacity onPress={this.PushDate}>
+          <TouchableOpacity onPress={this.ListGigs}>
             <LinearGradient colors={['#5851E7', '#38347F']} start={{ x: 1, y: 0 }} end={{ x: 0, y: 0 }} style={styles.containerButton}>
               <Text style={styles.textBtn}>Atualizar Lista</Text>
             </LinearGradient>
           </TouchableOpacity>
         </View>
 
-        {
-          this.state.gigList.map(
-            (item, index) => (
-              <CardSchedule
-                key={index}
-                item={item}
-                id={index + 1}
-                title={item.title}
-                gigDate={item.gigDate}
-                deadLine={item.deadLine}
-              />
+        <ScrollView>
+          {
+            this.state.gigList.map(
+              (item, index) => (
+                <CardSchedule
+                  key={index}
+                  item={item}
+                  id={index + 1}
+                  title={item.title}
+                  gigDate={item.gigDate}
+                  deadLine={item.deadLine}
+                />
+              )
             )
-          )
-        }
+          }
+        </ScrollView>
 
       </View>
     );
@@ -165,6 +191,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 50 / 4,
   },
+  containerButtonInfo: {
+    height: 45,
+    width: 45,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 50 / 2,
+  },
   textBtn: {
     color: 'white',
     fontSize: 16,
@@ -174,5 +208,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginVertical: 20,
+  },
+  modalInfo: {
+    backgroundColor: '#0c0945',
+    paddingHorizontal: 25,
+    alignItems: 'center',
+    paddingVertical: 40,
   },
 });
