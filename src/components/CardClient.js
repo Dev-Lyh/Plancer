@@ -1,66 +1,34 @@
 /* eslint-disable prettier/prettier */
 import { StyleSheet, Text, Image, TouchableOpacity, View } from 'react-native';
 import React, { Component } from 'react';
-import Icon from 'react-native-vector-icons/Octicons';
+import { Button, Avatar } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Database from '../db/database';
 
 export default class CardClient extends Component {
-
-  handleFavorite = () => {
-    if (this.props.favorite === 'false') {
-      this.props.atualizar(this.props.item);
-    } else if (this.props.favorite === 'true') {
-      this.props.other(this.props.item);
-    }
-  }
-
-  handleStar = () => {
-    if (this.props.favorite === 'false') {
-      return (
-        <TouchableOpacity onPress={this.handleFavorite} style={styles.buttonsSpec}>
-          <Icon name="star" size={24} color="silver" />
-          <Text style={{ color: 'white', fontWeight: 'bold' }}>Favoritar</Text>
-        </TouchableOpacity>
-      );
-    } else if (this.props.favorite === 'true') {
-      return (
-        <TouchableOpacity onPress={this.handleFavorite} style={styles.buttonsSpec}>
-          <Icon name="star-fill" size={24} color="white" />
-          <Text style={{ color: 'white', fontWeight: 'bold' }}>Desfavoritar</Text>
-        </TouchableOpacity>
-      );
-    }
-  }
-
-  isImage = () => {
-    if (this.props.image === "") {
-      return (
-        <View style={{ width: 150, height: 150, borderRadius: 10, backgroundColor: '#7b68ee', alignItems: 'center', justifyContent: 'center' }}>
-          <Icon name={'person'} color={'#fff'} size={150} />
-        </View>
-      )
-
-    } else {
-      return <Image style={{ width: 150, height: 150, borderRadius: 10 }} source={{ uri: this.props.image }} />
-
-    }
-  }
 
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.borderBottom}>
-          {this.isImage()}
+          {
+            this.props.image === ''
+            ?
+            <Avatar.Icon icon={'account-outline'} color='#c2c2c2' size={150} style={{ borderRadius: 10, backgroundColor: '#8c8c8c50', borderWidth: 1, borderColor: '#c2c2c2'}}/>
+            :
+            <Image style={{ width: 150, height: 150, borderRadius: 10 }} source={{ uri: this.props.image }} />
+          }
           <Text style={styles.nameStyle}>{this.props.name}</Text>
           <Text style={styles.mailStyle}>{this.props.email}</Text>
           <Text style={styles.phoneStyle}>{this.props.phoneNumber}</Text>
         </View>
         <View style={styles.containerButtons}>
-          {this.handleStar()}
-          <TouchableOpacity style={styles.buttonsSpec} onPress={() => this.props.deletar(this.props.item.idClient)}>
-            <Icon name="trash" size={24} color="mediumslateblue" />
-            <Text style={{ color: 'white', fontWeight: 'bold' }}>Excluir</Text>
-          </TouchableOpacity>
+          <Button mode={'outlined'} color={this.props.favorite === 'false' ? '#4794ff' : '#ffb547'} style={{ backgroundColor: this.props.favorite === 'false' ? '#2469c950' : '#c9872450', borderColor: this.props.favorite === 'false' ? '#4794ff' : '#ffb547', }} icon={this.props.favorite === 'false' ? 'star-outline' : 'star'} onPress={this.props.favorite === 'false' ? () => this.props.favoritar(this.props.item) : () => this.props.desfavoritar(this.props.item)}>
+            <Text>{this.props.favorite === 'false' ? 'Favoritar' : 'Desfavoritar'}</Text>
+          </Button>
+          <Button onPress={() => this.props.deletar(this.props.item.idClient)} icon={'delete'} color={'#ed7c68'} mode={'outlined'} style={{ backgroundColor: '#c93d2450', borderColor: '#ed7c68' }} >
+            <Text>Excluir</Text>
+          </Button>
         </View>
       </View>
     );
@@ -79,19 +47,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   containerButtons: {
-    alignItems: 'center',
+    alignItems: 'flex-end',
     height: 100,
     justifyContent: 'space-between',
-  },
-  buttonsSpec: {
-    width: 130,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    height: 40,
-    paddingHorizontal: 10,
-    borderRadius: 4,
-    backgroundColor: '#FFFFFF05',
   },
   nameStyle: {
     fontSize: 24,

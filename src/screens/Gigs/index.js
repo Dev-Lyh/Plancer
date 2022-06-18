@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
-import { Text, ScrollView, StyleSheet, View, Button } from 'react-native';
+import { Text, ScrollView, StyleSheet, View } from 'react-native';
+import { Button } from 'react-native-paper';
 import React, { Component } from 'react';
 import Logo from '../../assets/Logo';
 
@@ -46,7 +47,9 @@ export default class Gigs extends Component {
 
         <View style={styles.header}>
           <Logo />
-          <Button title="Atualizar" onPress={() => this.ListGigs()} color={'#7b68ee'} />
+          <Button onPress={() => this.ListGigs()} color={'#7b68ee'} mode={'outlined'} style={{ borderColor: '#7b68ee', backgroundColor: '#372EDF50' }} icon={'update'}>
+            <Text>Atualizar</Text>
+          </Button>
 
         </View>
 

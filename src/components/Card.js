@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Image, Button } from 'react-native';
+import { Text, View, StyleSheet, Image } from 'react-native';
 import Octicons from 'react-native-vector-icons/Octicons';
+import { Button, Badge } from 'react-native-paper';
 
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
@@ -22,7 +23,7 @@ export default class Card extends Component {
       )
 
     } else {
-      return <Image style={{ width: '100%', height: 200, opacity: this.props.concluded === "false" ? 1 : 0.5}} source={{ uri: this.props.image }} />;
+      return <Image style={{ width: '100%', height: 200, opacity: this.props.concluded === "false" ? 1 : 0.5 }} source={{ uri: this.props.image }} />;
 
     }
   }
@@ -55,7 +56,7 @@ export default class Card extends Component {
               <Text style={styles.clientName}>Cliente: {this.props.clientName}</Text>
             </View>
           </View>
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginVertical: 20 }}>
             <Icon name="phone-alt" color="white" size={16} style={styles.marginRight} />
             <Text style={styles.phoneNumber}> {this.props.phoneClient === '' ? 'Sem número de telefone' : this.props.phoneClient}</Text>
           </View>
@@ -64,14 +65,22 @@ export default class Card extends Component {
               this.props.concluded === 'false'
                 ?
                 <>
-                  <Button onPress={() => this.props.excluir(this.props.id)} title="deletar" color={'tomato'} />
-                  <Button onPress={() => this.handleConclud(this.props.item)} title="concluir" color={'seagreen'} />
+                  <Button icon={'delete'} onPress={() => this.props.excluir(this.props.id)} color={'#ed7c68'} mode={'outlined'} style={{ backgroundColor: '#c93d2450', borderColor: '#ed7c68' }}>
+                    <Text>deletar</Text>
+                  </Button>
+                  <Button icon={'check'} onPress={() => this.handleConclud(this.props.item)} color={'#47ff97'} mode={'outlined'} style={{ backgroundColor: '#24c96b50', borderColor: '#47ff97' }}>
+                    <Text>concluir</Text>
+                  </Button>
                 </>
                 :
-                <Button onPress={() => this.props.excluir(this.props.id)} title="deletar" color={'tomato'} />
-              }
+                <Button icon={'delete'} onPress={() => this.props.excluir(this.props.id)} color={'#ed7c68'} mode={'outlined'} style={{ backgroundColor: '#c93d2450', borderColor: '#ed7c68' }}>
+                  <Text>deletar</Text>
+                </Button>
+            }
           </View>
-          <Text style={styles.description}>Pedido: {this.props.id}</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', width: '100%', justifyContent: 'center', marginTop: 20 }}>
+            <Badge style={[styles.description, { backgroundColor: 'rgba(88, 81, 231, 1)', paddingHorizontal: 8 }]}>Pedido: {this.props.id}</Badge>
+          </View>
         </View>
       </LinearGradient>
     );
@@ -151,7 +160,6 @@ const styles = StyleSheet.create({
     borderRadius: 145 / 10,
   },
   phoneNumber: {
-
     fontSize: 16,
     color: 'white',
     textAlign: 'center',

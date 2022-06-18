@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
-import { Text, View, ScrollView, TextInput, StyleSheet, TouchableOpacity, Image, Button } from 'react-native';
+import { Text, View, ScrollView, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import React, { Component } from 'react';
 import ImagePicker from 'react-native-image-crop-picker';
+import { Button, TextInput, TextInputMask } from 'react-native-paper';
 
 import Database from '../../db/database';
 import Gig from '../../models/Gig';
@@ -77,27 +78,29 @@ export default class NewGig extends Component {
         ) : (
           <Image source={{ uri: this.state.imgPath }} style={styles.imageFullBox} />
         )}
-        <Button title={'Escolher uma foto da galeria'} onPress={this.choosePhotoFromLibrary} color={'rgba(88, 81, 231, 1)'} />
+        <Button mode="contained" onPress={this.choosePhotoFromLibrary} buttonColor={'rgba(88, 81, 231, 1)'} textColor={'white'}>
+          <Text>Escolher uma foto da galeria</Text>
+        </Button>
         <LinearGradient colors={['rgba(88, 81, 231, 1)', 'rgba(88, 81, 231, 0)']} style={[styles.gradientContainer, { marginTop: 30 }]}>
-          <TextInput style={styles.input} placeholder="Título" onChangeText={(value) => { this.setState({ title: value }); }} placeholderTextColor="rgba(255,255,255,0.5)" />
+          <TextInput underlineColor={'transparent'} activeUnderlineColor={'#5551a8'} style={styles.input} placeholder="Título" onChangeText={(value) => { this.setState({ title: value }); }} placeholderTextColor="rgba(255,255,255,0.5)" theme={{ colors: { text: 'white' }}}/>
         </LinearGradient>
         <LinearGradient colors={['rgba(88, 81, 231, 1)', 'rgba(88, 81, 231, 0)']} style={styles.gradientContainer}>
-          <TextInput style={styles.input} placeholder="Descrição" multiline={true} onChangeText={(value) => { this.setState({ description: value }); }} placeholderTextColor="rgba(255,255,255,0.5)" />
+          <TextInput underlineColor={'transparent'} activeUnderlineColor={'#5551a8'} style={styles.input} placeholder="Descrição" multiline={true} onChangeText={(value) => { this.setState({ description: value }); }} placeholderTextColor="rgba(255,255,255,0.5)" theme={{ colors: { text: 'white' } }} />
         </LinearGradient>
         <LinearGradient colors={['rgba(88, 81, 231, 1)', 'rgba(88, 81, 231, 0)']} style={styles.gradientContainer}>
-          <TextInput style={styles.input} placeholder="Data de Início" onChangeText={(value) => { this.setState({ gigDate: value }); }} placeholderTextColor="rgba(255,255,255,0.5)" />
+          <TextInput underlineColor={'transparent'} activeUnderlineColor={'#5551a8'} style={styles.input} placeholder="Data de Início" onChangeText={(value) => { this.setState({ gigDate: value }); }} placeholderTextColor="rgba(255,255,255,0.5)" theme={{ colors: { text: 'white' } }} />
         </LinearGradient>
         <LinearGradient colors={['rgba(88, 81, 231, 1)', 'rgba(88, 81, 231, 0)']} style={styles.gradientContainer}>
-          <TextInput style={styles.input} placeholder="Data de Entrega" onChangeText={(value) => { this.setState({ deadLine: value }); }} placeholderTextColor="rgba(255,255,255,0.5)" />
+          <TextInput underlineColor={'transparent'} activeUnderlineColor={'#5551a8'} style={styles.input} placeholder="Data de Entrega" onChangeText={(value) => { this.setState({ deadLine: value }); }} placeholderTextColor="rgba(255,255,255,0.5)" theme={{ colors: { text: 'white' } }} />
         </LinearGradient>
         <LinearGradient colors={['rgba(88, 81, 231, 1)', 'rgba(88, 81, 231, 0)']} style={styles.gradientContainer}>
-          <TextInput style={styles.input} placeholder="Preço" onChangeText={(value) => { this.setState({ price: value }); }} placeholderTextColor="rgba(255,255,255,0.5)" />
+          <TextInput underlineColor={'transparent'} activeUnderlineColor={'#5551a8'} style={styles.input} placeholder="Preço" onChangeText={(value) => { this.setState({ price: value }); }} placeholderTextColor="rgba(255,255,255,0.5)" theme={{ colors: { text: 'white' } }} />
         </LinearGradient>
         <LinearGradient colors={['rgba(88, 81, 231, 1)', 'rgba(88, 81, 231, 0)']} style={styles.gradientContainer}>
-          <TextInput style={styles.input} placeholder="Nome do cliente" onChangeText={(value) => { this.setState({ clientName: value }); }} placeholderTextColor="rgba(255,255,255,0.5)" />
+          <TextInput underlineColor={'transparent'} activeUnderlineColor={'#5551a8'} style={styles.input} placeholder="Nome do cliente" onChangeText={(value) => { this.setState({ clientName: value }); }} placeholderTextColor="rgba(255,255,255,0.5)" theme={{ colors: { text: 'white' } }} />
         </LinearGradient>
         <LinearGradient colors={['rgba(88, 81, 231, 1)', 'rgba(88, 81, 231, 0)']} style={styles.gradientContainer}>
-          <TextInput style={styles.input} placeholder="Nº de telefone do Cliente" onChangeText={(value) => { this.setState({ phoneClient: value }); }} placeholderTextColor="rgba(255,255,255,0.5)" />
+          <TextInput underlineColor={'transparent'} activeUnderlineColor={'#5551a8'} style={styles.input} placeholder="Nº de telefone do Cliente" onChangeText={(value) => { this.setState({ phoneClient: value }); }} placeholderTextColor="rgba(255,255,255,0.5)" theme={{ colors: { text: 'white' } }} />
         </LinearGradient>
 
         <View style={{ alignItems: 'center' }}>
@@ -151,19 +154,20 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   gradientContainer: {
-    height: 42,
+    height: 46,
     paddingVertical: 1,
     marginBottom: 20,
     paddingHorizontal: 1,
-    borderRadius: 44 / 4,
+    borderRadius: 3,
   },
   input: {
     backgroundColor: '#202020',
     color: 'white',
     width: '100%',
+    borderBottomWidth: 0,
+    elevation: 0,
     height: 40,
     paddingHorizontal: 15,
-    borderRadius: 40 / 4,
   },
   containerButton: {
     flexDirection: 'row',

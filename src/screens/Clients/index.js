@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
-import { Text, TextInput, ScrollView, TouchableOpacity, StyleSheet, View, Image, Button } from 'react-native';
+import { Text, ScrollView, TouchableOpacity, StyleSheet, View, Image } from 'react-native';
+import { Button, TextInput } from 'react-native-paper';
 import React, { Component } from 'react';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -102,12 +103,9 @@ export default class Clients extends Component {
 
         <View style={styles.header}>
           <Logo />
-          <TouchableOpacity onPress={this.handleModal}>
-            <LinearGradient colors={['#5851E7', '#38347F']} start={{ x: 1, y: 0 }} end={{ x: 0, y: 0 }} style={styles.containerButton}>
-              <Icon name="touch-app" color="white" size={28} style={styles.icon} />
-              <Text style={styles.textBtn}>Adicionar Cliente</Text>
-            </LinearGradient>
-          </TouchableOpacity>
+          <Button onPress={this.handleModal} icon={'account-plus-outline'} color={'#7b68ee'} mode={'outlined'} style={{ borderColor: '#7b68ee', backgroundColor: '#372EDF50' }}>
+            <Text>Adicionar Cliente</Text>
+          </Button>
         </View>
 
         <Modal isVisible={this.state.isVisible}>
@@ -127,25 +125,24 @@ export default class Clients extends Component {
             ) : (
               <Image source={{ uri: this.state.imgPath }} style={styles.imageFullBox} />
             )}
-            <Button title={'Escolher uma foto da galeria'} onPress={this.choosePhotoFromLibrary} color={'rgba(88, 81, 231, 1)'}/>
+            <Button onPress={this.choosePhotoFromLibrary} icon={'camera'} color={'#7b68ee'} mode={'outlined'} style={{ borderColor: '#7b68ee', backgroundColor: '#372EDF50' }}>
+              <Text>Escolher uma foto da galeria</Text>
+            </Button>
 
             <LinearGradient colors={['rgba(88, 81, 231, 1)', 'rgba(88, 81, 231, 0)']} style={[styles.gradientContainer, { marginTop: 30 }]}>
-              <TextInput style={styles.input} placeholder="Nome do Cliente" onChangeText={(value) => { this.setState({ name: value }); }} placeholderTextColor="rgba(255,255,255,0.5)" />
+              <TextInput activeUnderlineColor={'#7b68ee80'} style={styles.input} placeholder="Nome do Cliente" onChangeText={(value) => { this.setState({ name: value }); }} placeholderTextColor="rgba(255,255,255,0.5)" theme={{ colors: { text: 'white' } }} />
             </LinearGradient>
 
             <LinearGradient colors={['rgba(88, 81, 231, 1)', 'rgba(88, 81, 231, 0)']} style={styles.gradientContainer}>
-              <TextInput style={styles.input} placeholder="Email" onChangeText={(value) => { this.setState({ email: value }); }} placeholderTextColor="rgba(255,255,255,0.5)" />
+              <TextInput activeUnderlineColor={'#7b68ee80'} style={styles.input} placeholder="Email" onChangeText={(value) => { this.setState({ email: value }); }} placeholderTextColor="rgba(255,255,255,0.5)" theme={{ colors: { text: 'white' } }} />
             </LinearGradient>
 
             <LinearGradient colors={['rgba(88, 81, 231, 1)', 'rgba(88, 81, 231, 0)']} style={styles.gradientContainer}>
-              <TextInput style={styles.input} placeholder="Telefone do Cliente" onChangeText={(value) => { this.setState({ phoneNumber: value }); }} placeholderTextColor="rgba(255,255,255,0.5)" />
+              <TextInput activeUnderlineColor={'#7b68ee80'} style={styles.input} placeholder="Telefone do Cliente" onChangeText={(value) => { this.setState({ phoneNumber: value }); }} placeholderTextColor="rgba(255,255,255,0.5)" theme={{ colors: { text: 'white' } }} />
             </LinearGradient>
-
-            <LinearGradient colors={['rgba(88, 81, 231, 1)', 'rgba(88, 81, 231, 0)']} style={styles.gradientContainerTwo} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
-              <TouchableOpacity onPress={() => this.InsertClient(this.state.name, this.state.email, this.state.phoneNumber, this.state.favorite, this.state.imgPath)} style={styles.btnConcluded}>
-                <Text style={styles.textConcluded}>Concluir Ação</Text>
-              </TouchableOpacity>
-            </LinearGradient>
+            <Button icon={'account-plus-outline'} onPress={() => this.InsertClient(this.state.name, this.state.email, this.state.phoneNumber, this.state.favorite, this.state.imgPath)} color={'#47ff97'} mode={'outlined'} style={{ borderColor: '#47ff97', backgroundColor: '#24c96b50' }}>
+              <Text>Concluir Ação</Text>
+            </Button>
           </View>
         </Modal>
 
@@ -161,8 +158,8 @@ export default class Clients extends Component {
                 phoneNumber={item.phoneNumber}
                 favorite={item.favorite}
                 deletar={this.DeleteClient}
-                atualizar={this.Concluir}
-                other={this.Desconcluir}
+                favoritar={this.Concluir}
+                desfavoritar={this.Desconcluir}
               />
             )
           )
@@ -260,8 +257,8 @@ const styles = StyleSheet.create({
     paddingVertical: 1,
     marginBottom: 30,
     paddingHorizontal: 1,
-    borderRadius: 44 / 4,
     justifyContent: 'center',
+    borderRadius: 4,
   },
   input: {
     backgroundColor: '#202020',

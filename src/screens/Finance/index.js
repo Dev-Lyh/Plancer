@@ -8,7 +8,7 @@ export default class Finance extends Component {
     return (
       <View style={styles.containerView}>
         <InConstruction />
-        <Text style={styles.textVersion}>version 1.0.1</Text>
+        <Text style={styles.textVersion}>version 1.0.2</Text>
       </View>
     );
   }
